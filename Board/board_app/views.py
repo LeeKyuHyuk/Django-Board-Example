@@ -1,4 +1,4 @@
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render
 from django.urls import reverse
 
@@ -21,3 +21,11 @@ def post(request):
         return HttpResponseRedirect(reverse('index'))
     else:
         return render(request, 'post.html')
+
+
+def detail(request, post_id):
+    try:
+        board = Board.objects.get(pk=post_id)
+    except Board.DoesNotExist:
+        raise Http404("Does not exist!")
+    return render(request, 'detail.html', {'board': board})
